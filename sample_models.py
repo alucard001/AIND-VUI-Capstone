@@ -58,7 +58,7 @@ def cnn_rnn_model(input_dim, filters, kernel_size, conv_stride,
     simp_rnn = SimpleRNN(units, activation='relu',
         return_sequences=True, implementation=2, name='rnn')(bn_cnn)
     # TODO: Add batch normalization
-    bn_rnn = BatchNormalization(name="bn_simp_rnn")(simp_rnn)
+    bn_rnn = BatchNormalization(name="bn_cnn_simp_rnn")(simp_rnn)
     # TODO: Add a TimeDistributed(Dense(output_dim)) layer
     time_dense = TimeDistributed(Dense(output_dim))(bn_rnn)
     # Add softmax activation layer
@@ -103,7 +103,7 @@ def deep_rnn_model(input_dim, units, recur_layers, output_dim=29):
     
     if recur_layers == 1:
         gru_rnn = GRU(units, activation=activation, return_sequences=True, implementation=2, name='rnn')(input_data)
-        bn_rnn = BatchNormalization(name="bn_simp_rnn")(gru_rnn)
+        bn_rnn = BatchNormalization(name="bn_deep_gru_rnn")(gru_rnn)
     else:
         for i in range(recur_layers):
             next_input = input_data if i == 0 else bn_rnn
