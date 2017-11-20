@@ -99,7 +99,7 @@ def deep_rnn_model(input_dim, units, recur_layers, output_dim=29):
     input_data = Input(name='the_input', shape=(None, input_dim))
     # TODO: Add recurrent layers, each with batch normalization
     
-    recur_layers = 1 if recur_layers <= 0
+    recur_layers = 1 if recur_layers <= 0 else recur_layers
     
     if recur_layers == 1:
         gru_rnn = GRU(units, activation=activation, return_sequences=True, implementation=2, name='rnn')(input_data)
