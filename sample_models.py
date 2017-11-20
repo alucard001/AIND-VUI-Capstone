@@ -126,7 +126,7 @@ def bidirectional_rnn_model(input_dim, units, output_dim=29):
     # Main acoustic input
     input_data = Input(name='the_input', shape=(None, input_dim))
     # TODO: Add bidirectional recurrent layer
-    bidir_rnn = Bidirectional()(input_data)
+    bidir_rnn = Bidirectional(LSTM(10, return_sequences=True))(input_data)
     # TODO: Add a TimeDistributed(Dense(output_dim)) layer
     time_dense = TimeDistributed(Dense(output_dim))(bidir_rnn)
     # Add softmax activation layer
@@ -137,18 +137,27 @@ def bidirectional_rnn_model(input_dim, units, output_dim=29):
     print(model.summary())
     return model
 
-def final_model():
+def final_model(input_dim=161, output_dim=29, units=64):
     """ Build a deep network for speech 
     """
     # Main acoustic input
     input_data = Input(name='the_input', shape=(None, input_dim))
     # TODO: Specify the layers in your network
-    ...
+    
+    # 1st BiDirectional
+    bidir_rnn = Bidirectional(LSTM(units, return_sequences=True))(input_data)
+    # 2nd BiDirectional
+    bidir_rnn = Bidirectional(LSTM(units, return_sequences=True))(bidir_rnn)
+    # 3rd BiDirectional
+    bidir_rnn = Bidirectional(LSTM(units, return_sequences=True))(bidir_rnn)
+    
+    time_dense = TimeDistributed(Dense(output_dim))(bidir_rnn)
+    
     # TODO: Add softmax activation layer
-    y_pred = ...
+    y_pred = Activation('softmax', name='softmax')(time_dense)
     # Specify the model
     model = Model(inputs=input_data, outputs=y_pred)
     # TODO: Specify model.output_length
-    model.output_length = ...
+    model.output_length = lambda x: x
     print(model.summary())
     return model
