@@ -137,19 +137,18 @@ def bidirectional_rnn_model(input_dim, units, output_dim=29):
     print(model.summary())
     return model
 
-def final_model(input_dim=161, output_dim=29, units=64):
+def final_model(input_dim=161, output_dim=29, units=64, dropout_rate = 0.2):
     """ Build a deep network for speech 
     """
     # Main acoustic input
     input_data = Input(name='the_input', shape=(None, input_dim))
     # TODO: Specify the layers in your network
-    
     # 1st BiDirectional
-    bidir_rnn = Bidirectional(LSTM(units, return_sequences=True))(input_data)
+    bidir_rnn = Bidirectional(LSTM(units, return_sequences=True, dropout_W=dropout_rate, dropout_U=dropout_rate))(input_data)
     # 2nd BiDirectional
-    bidir_rnn = Bidirectional(LSTM(units, return_sequences=True))(bidir_rnn)
+    bidir_rnn = Bidirectional(LSTM(units, return_sequences=True, dropout_W=dropout_rate, dropout_U=dropout_rate))(bidir_rnn)
     # 3rd BiDirectional
-    bidir_rnn = Bidirectional(LSTM(units, return_sequences=True))(bidir_rnn)
+    bidir_rnn = Bidirectional(LSTM(units, return_sequences=True, dropout_W=dropout_rate, dropout_U=dropout_rate))(bidir_rnn)
     
     time_dense = TimeDistributed(Dense(output_dim))(bidir_rnn)
     
